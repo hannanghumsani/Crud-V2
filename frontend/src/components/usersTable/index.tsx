@@ -7,8 +7,11 @@ import { deleteUser, getAllUsers } from "../../ApiS/userApi";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { toast } from "react-toastify";
 
-
-function Index({ metaData, users }) {
+interface indexSchema {
+    metaData: any;
+    users: any;
+}
+function Index({ metaData, users }: indexSchema) {
     const [meta, setMeta] = useState(metaData);
     const [userData, setUserData] = useState(users);
     const [loading, setLoading] = useState(false);

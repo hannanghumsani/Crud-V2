@@ -5,16 +5,5 @@
             "src": "index.js",
             "use": "@vercel/node"
         }
-    ],
-    "routes": [
-        {
-            "src": "/api/(.*)",
-            "dest": "index.js"
-        }
-    ],
-    "functions": {
-        "index.js": {
-            "runtime": "nodejs18.x"
-        }
-    }
+    ]
 }
