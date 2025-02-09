@@ -79,9 +79,6 @@ function Index({ metaData, users }: indexSchema) {
     };
 
 
-    // useEffect(() => {
-    //     allUsersGet();
-    // }, [searchParams]);
 
     return (
         <Fragment>
