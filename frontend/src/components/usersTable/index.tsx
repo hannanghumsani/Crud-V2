@@ -38,8 +38,8 @@ function Index({ metaData, users }: indexSchema) {
 
     };
     const allUsersGet = async () => {
-        const perPage = searchParams.get("perPage")
-        const page = searchParams.get("page")
+        const perPage = searchParams.get("perPage") || 10
+        const page = searchParams.get("page") || 0
         try {
             setLoading(true);
             const resp = await getAllUsers(+perPage, +page);
