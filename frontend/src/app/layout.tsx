@@ -3,6 +3,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -29,6 +32,7 @@ export default function RootLayout({
       <body
         className={`bg-black antialiased`}
       >
+        <ToastContainer />
         {children}
         <footer className="bg-gray-800 text-gray-300 py-6 mt-8">
           <div className="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">
