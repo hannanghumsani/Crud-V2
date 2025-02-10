@@ -20,7 +20,6 @@ function Index({ metaData, users }: indexSchema) {
     const pathname = usePathname();
 
 
-    // const router = useRouter();
     const updatePage = async (newPage: any) => {
         const params = new URLSearchParams(searchParams);
         params.set("page", newPage);
