@@ -20,6 +20,7 @@ function Index({ metaData, users }: indexSchema) {
     const pathname = usePathname();
 
 
+    // const router = useRouter();
     const updatePage = async (newPage: any) => {
         const params = new URLSearchParams(searchParams);
         params.set("page", newPage);
@@ -61,7 +62,7 @@ function Index({ metaData, users }: indexSchema) {
             if (resp?.status === 200) {
                 toast.success(resp?.data?.message, {
                     position: "top-right",
-                    autoClose: 1000,
+                    autoClose: 1200,
                     closeOnClick: true,
                     theme: "colored",
                 });

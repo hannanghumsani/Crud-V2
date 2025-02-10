@@ -8,5 +8,7 @@ router.put("/:id", updateUser);
 router.delete("/", deleteUser);
 router.get("/", getAllUsers);
 router.post("/bulk", createUsers);
+// router.post("/bulk", createUsers);
+
 
 module.exports = router;
