@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { FormikHelpers, useFormik } from "formik";
 import * as Yup from "yup";
 import CreateUserFormUI from "./UI/creareUI";
@@ -54,24 +54,33 @@ const validationSchemaUser = Yup.object({
         .required("Gender is required"),
 });
 
-
+// Component wrapped in Suspense
 const CreateUserForm: React.FC = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <CreateUserFormContent />
+        </Suspense>
+    );
+};
+
+const CreateUserFormContent: React.FC = () => {
+    const searchParams = useSearchParams();
     const router = useRouter();
-    const [loading, setLoading] = useState(false)
-    const searchParams = useSearchParams()
-
-
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
         try {
             console.log("Form Submitted:", values);
-            setLoading(true)
+            setLoading(true);
             let resp: any;
-            if (searchParams.get("userId")) {
-                resp = await updateUser(searchParams.get("userId"), values);
+            const userId = searchParams.get("userId");
+
+            if (userId) {
+                resp = await updateUser(userId, values);
             } else {
                 resp = await createUser(values);
             }
+
             if (resp?.status === 201) {
                 toast.success(resp?.data?.message, {
                     position: "top-right",
@@ -80,23 +89,21 @@ const CreateUserForm: React.FC = () => {
                 router.push("/detail");
             }
         } catch (error: any) {
-            // console.error("Error submitting form:", error);
             toast.error(error?.data?.message || "Something went wrong!", {
                 position: "top-right",
                 autoClose: 2000,
             });
-            setLoading(false)
+            setLoading(false);
         } finally {
             actions.setSubmitting(false);
-            setLoading(false)
+            setLoading(false);
         }
     };
 
-
     const formik = useFormik({
-        initialValues: initialValues,
+        initialValues,
         validationSchema: validationSchemaUser,
-        onSubmit: handleSubmit
+        onSubmit: handleSubmit,
     });
 
     const getByIdUser = async (id: any) => {
@@ -104,8 +111,8 @@ const CreateUserForm: React.FC = () => {
             setLoading(true);
             const resp = await getUserById(id);
             if (resp?.status === 200) {
-                const setUser = resp?.data?.user;
-                formik.setValues(setUser)
+                const user = resp?.data?.user;
+                formik.setValues(user);
             }
         } catch (error: any) {
             toast.error(error?.data?.message || "Failed to fetch user.", {
@@ -118,19 +125,13 @@ const CreateUserForm: React.FC = () => {
     };
 
     useEffect(() => {
-        const userID = searchParams.get("userId")
+        const userID = searchParams.get("userId");
         if (userID) {
-            getByIdUser(userID)
+            getByIdUser(userID);
         }
-    }, [])
+    }, [searchParams]); // Added searchParams dependency
 
-
-
-    return (
-        // <Formik initialValues={userData || initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-        <CreateUserFormUI {...formik} loading={loading} />
-        // </Formik>
-    );
+    return <CreateUserFormUI {...formik} loading={loading} />;
 };
 
 export default CreateUserForm;
