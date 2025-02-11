@@ -1,14 +1,16 @@
 import { Col, Row } from "react-bootstrap";
 import UserTable from "@/components/usersTable";
-import { getAllUsers } from "@/ApiS/userApi";
-
+import { getAllUsersSSR } from "@/ApiS/userApi";
+import { cookies } from "next/headers";
 
 export default async function Home({ searchParams }: { searchParams: { perPage?: string; page?: string } }) {
     const perPage = searchParams?.perPage || "10";
     const page = searchParams?.page || "1";
 
-    const resp = await getAllUsers(Number(perPage), Number(page));
-    // console.log(resp);
+    const cookieStore = cookies();
+    const token = cookieStore.get("token")?.value;
+
+    const resp = await getAllUsersSSR(Number(perPage), Number(page), token);
 
     return (
         <Row>

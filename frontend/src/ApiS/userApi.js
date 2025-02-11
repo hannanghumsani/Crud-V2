@@ -1,57 +1,89 @@
-import axios from "axios";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import apiInstance from "../Network/apiInterceptor";
 
 export const getAllUsers = async (perPage = 10, page = 1) => {
     try {
-        return await axios.get(`${API_URL}/user`, { params: { perPage, page } });
+        return await apiInstance.get(`/user`, { params: { perPage, page } });
+    } catch (err) {
+        console.error("Error fetching users:", err.response || err.message);
+        throw err;
+    }
+};
+
+export const getAllUsersSSR = async (perPage = 10, page = 1, token) => {
+    try {
+        return await axios.get(`${API_URL}/user`, {
+            params: { perPage, page },
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
     } catch (err) {
         console.error("Error fetching users:", err.response || err.message);
         throw err.response;
     }
 };
 
+
 export const createUser = async (userData) => {
     try {
-        return await axios.post(`${API_URL}/user/addUser`, userData);
+        return await apiInstance.post(`/user/addUser`, userData);
     } catch (err) {
         console.error("Error creating user:", err.response || err.message);
-        throw err.response;
+        throw err;
     }
 };
 
 export const createUsers = async (usersArray) => {
     try {
-        return await axios.post(`${API_URL}/user/bulk`, usersArray);
+        return await apiInstance.post(`/user/bulk`, usersArray);
     } catch (err) {
         console.error("Error creating multiple users:", err.response || err.message);
-        throw err.response;
+        throw err;
     }
 };
 
 export const updateUser = async (userId, updatedData) => {
     try {
-        return await axios.put(`${API_URL}/user/${userId}`, updatedData);
+        return await apiInstance.put(`/user/${userId}`, updatedData);
     } catch (err) {
         console.error("Error updating user:", err.response || err.message);
-        throw err.response;
+        throw err;
     }
 };
 
 export const deleteUser = async (userId) => {
     try {
-        return await axios.delete(`${API_URL}/user?userId=${userId}`,);
+        return await apiInstance.delete(`/user?userId=${userId}`);
     } catch (err) {
         console.error("Error deleting user:", err.response || err.message);
+        throw err;
+    }
+};
+
+export const getUserById = async (userId) => {
+    try {
+        return await apiInstance.get(`/user/userById/${userId}`);
+    } catch (err) {
+        throw err;
+    }
+};
+
+// Login & Register - Direct API Calls (No Interceptor)
+import axios from "axios";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+export const registerUser = async (userData) => {
+    try {
+        return await axios.post(`${API_URL}/user/register`, userData);
+    } catch (err) {
         throw err.response;
     }
 };
-export const getUserById = async (userId) => {
+
+export const loginUser = async (userData) => {
     try {
-        const response = await axios.get(`${API_URL}/user/userById/${userId}`);
-        return response;
+        return await axios.post(`${API_URL}/user/login`, userData);
     } catch (err) {
-        // console.error("Error fetching user:", err.response?.data || err.message);
         throw err.response;
     }
 };

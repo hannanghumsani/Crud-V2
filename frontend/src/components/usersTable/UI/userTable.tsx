@@ -1,5 +1,5 @@
 "use client";
-import { Table, Dropdown, DropdownButton, Pagination, Form, Row, Col, Spinner } from "react-bootstrap";
+import { Table, Dropdown, DropdownButton, Pagination, Form, Row, Col, Spinner, Button } from "react-bootstrap";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -48,7 +48,15 @@ export default function TableComponent({ meta, userData, loading, updatePage, up
                 </div>
             ) : (
                 <div className="container">
-                    <h2 className="text-center text-info mb-4">User List</h2>
+
+                    <div className="d-flex justify-content-between text-light">
+                        <h2 className="text-center text-info mb-4">User List</h2>
+                        <h2>
+                            <Link href="/create" passHref>
+                                <Button> Create User </Button>
+                            </Link>
+                        </h2>
+                    </div>
 
                     <div className="table-responsive">
                         <Table striped bordered hover variant="dark" className="text-white">
@@ -130,8 +138,9 @@ export default function TableComponent({ meta, userData, loading, updatePage, up
                         </Col>
 
                     </Row>
-                </div>
-            )}
+                </div >
+            )
+            }
         </>
     );
 }
