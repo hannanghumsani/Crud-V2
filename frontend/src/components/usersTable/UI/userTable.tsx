@@ -1,7 +1,8 @@
 "use client";
-import { Table, Dropdown, DropdownButton, Pagination, Form, Row, Col, Spinner, ToastContainer, Toast } from "react-bootstrap";
+import { Table, Dropdown, DropdownButton, Pagination, Form, Row, Col, Spinner } from "react-bootstrap";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 interface TableComponentProps {
     meta: any;
     // showToast: boolean;
@@ -14,6 +15,7 @@ interface TableComponentProps {
 }
 export default function TableComponent({ meta, userData, loading, updatePage, updatePerPage, userDelete }: TableComponentProps) {
     const searchParams = useSearchParams();
+    // const navigate = useNavigate()
 
 
     // Default values from URL or fallback
@@ -72,7 +74,8 @@ export default function TableComponent({ meta, userData, loading, updatePage, up
                                         <td>{user?.createdAt}</td>
                                         <td className="text-center">
                                             <DropdownButton variant="secondary" title="">
-                                                <Dropdown.Item className="d-flex align-items-center">
+                                                <Dropdown.Item as={Link} href={`/create?userId=${user?._id}`}
+                                                    className="d-flex align-items-center">
                                                     <FaEdit className="me-2" /> Update
                                                 </Dropdown.Item>
                                                 <Dropdown.Item onClick={() => userDelete(user?._id)} className="d-flex align-items-center text-danger">

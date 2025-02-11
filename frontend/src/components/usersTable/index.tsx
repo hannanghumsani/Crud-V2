@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useState } from "react";
 import UserTable from "./UI/userTable";
 import { deleteUser, getAllUsers } from "../../ApiS/userApi";
 // import { useRouter } from "next/router";
@@ -18,31 +18,28 @@ function Index({ metaData, users }: indexSchema) {
     const searchParams = useSearchParams();
     const router = useRouter();
     const pathname = usePathname();
+    const params = new URLSearchParams(searchParams);
 
 
     // const router = useRouter();
     const updatePage = async (newPage: any) => {
-        const params = new URLSearchParams(searchParams);
         params.set("page", newPage);
         router.push(`${pathname}?${params.toString()}`, { scroll: false });
-        await allUsersGet();
-
+        allUsersGet('', newPage);
     };
 
     const updatePerPage = async (newPerPage: any) => {
-        const params = new URLSearchParams(searchParams);
         params.set("page", "1");
         params.set("perPage", newPerPage);
         router.push(`${pathname}?${params.toString()}`, { scroll: false });
-        await allUsersGet();
-
+        allUsersGet(newPerPage, "1");
     };
-    const allUsersGet = async () => {
-        const perPage = searchParams.get("perPage") || 10
-        const page = searchParams.get("page") || 0
+    const allUsersGet = async (perPage: any, page: any) => {
+        const PerPage = perPage || searchParams.get("perPage") || 10
+        const Page = page || searchParams.get("page") || 0
         try {
             setLoading(true);
-            const resp = await getAllUsers(+perPage, +page);
+            const resp = await getAllUsers(+PerPage, +Page);
             if (resp?.status === 200) {
                 setMeta(resp?.data?.meta);
                 setUserData(resp?.data?.users);
@@ -62,14 +59,14 @@ function Index({ metaData, users }: indexSchema) {
             if (resp?.status === 200) {
                 toast.success(resp?.data?.message, {
                     position: "top-right",
-                    autoClose: 1200,
+                    autoClose: 2500,
                     closeOnClick: true,
                     theme: "colored",
                 });
-                await allUsersGet();
+                await allUsersGet("", "");
             }
-        } catch (error) {
-            toast.error("Failed to delete user.", {
+        } catch (error: any) {
+            toast.error(error?.data?.message, {
                 position: "top-right",
                 autoClose: 1000,
             });
@@ -77,7 +74,6 @@ function Index({ metaData, users }: indexSchema) {
             setLoading(false);
         }
     };
-
 
 
     return (
