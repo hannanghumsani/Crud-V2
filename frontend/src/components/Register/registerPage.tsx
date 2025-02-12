@@ -64,7 +64,7 @@ const RegisterPageContainer: React.FC = () => {
                 throw new Error(resp?.data?.message || "Something went wrong!");
             }
         } catch (error: any) {
-            toast.error(error.message, {
+            toast.error(error.data.message, {
                 position: "top-right",
                 autoClose: 2000,
             });
